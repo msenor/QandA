@@ -1,5 +1,6 @@
 import React from 'react';
 import { UserIcon } from './Icons';
+import './Header.css';
 
 export const Header = () => {
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -7,7 +8,7 @@ export const Header = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <a href="./">Q & A</a>
       <input
         type="text"
