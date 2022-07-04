@@ -1,11 +1,17 @@
-import React from 'react';
-import styles from './App.module.css';
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import { Header } from './Header';
 import { HomePage } from './HomePage';
 
 function App() {
   return (
-    <div className={styles.container}>
+    <div
+      css={css`
+        font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+        font-size: 16px;
+        color: #5c5a5a;
+      `}
+    >
       <Header />
       <HomePage />
     </div>
