@@ -8,6 +8,7 @@ import {
   FieldContainer,
   FieldLabel,
   FieldTextArea,
+  FieldError,
   FormButtonContainer,
   PrimaryButton
 } from './Styles';
@@ -22,7 +23,9 @@ type FormData = {
 };
 
 export const QuestionPage = () => {
-  const { register } = useForm<FormData>();
+  const { register, formState: { errors } } = useForm<FormData>({
+    mode: 'onBlur'
+  });
   const [question, setQuestion] = React.useState<QuestionData | null>(null);
   const { questionId } = useParams();
   React.useEffect(() => {
@@ -83,17 +86,29 @@ export const QuestionPage = () => {
             >
               <Fieldset>
                 <FieldContainer>
-                  <FieldLabel htmlFor="content">
+                  <FieldLabel htmlFor='content'>
                     Your Answer
                   </FieldLabel>
                   <FieldTextArea 
-                    id="content"
-                    name="content"
-                    {...register}
+                    id='content'
+                    {...register('content', {
+                      required: true,
+                      minLength: 10
+                    })}
                   />
+                  {errors.content && errors.content.type === 'required' && (
+                    <FieldError>
+                      You must enter an answer
+                    </FieldError>
+                  )}
+                  {errors.content && errors.content.type === 'minLength' && (
+                    <FieldError>
+                      Your answer must be at least 10 characters
+                    </FieldError>
+                  )}
                 </FieldContainer>
                 <FormButtonContainer>
-                  <PrimaryButton type="submit">
+                  <PrimaryButton type='submit'>
                     Submit Your Answer
                   </PrimaryButton>
                 </FormButtonContainer>
