@@ -1,13 +1,28 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { gray3, gray6 } from './Styles';
+import { 
+  gray3,
+  gray6,
+  Fieldset,
+  FieldContainer,
+  FieldLabel,
+  FieldTextArea,
+  FormButtonContainer,
+  PrimaryButton
+} from './Styles';
 import { Page } from './Page';
 import { useParams } from 'react-router-dom';
 import { QuestionData, getQuestion } from './QuestionsData';
 import { AnswerList } from './AnswerList';
+import { useForm } from 'react-hook-form';
+
+type FormData = {
+  content: string;
+};
 
 export const QuestionPage = () => {
+  const { register } = useForm<FormData>();
   const [question, setQuestion] = React.useState<QuestionData | null>(null);
   const { questionId } = useParams();
   React.useEffect(() => {
@@ -61,6 +76,29 @@ export const QuestionPage = () => {
               ${question.created.toLocaleTimeString()}`}
             </div>
             <AnswerList data={question.answers} />
+            <form
+              css={css`
+                margin-top: 20px;
+              `}
+            >
+              <Fieldset>
+                <FieldContainer>
+                  <FieldLabel htmlFor="content">
+                    Your Answer
+                  </FieldLabel>
+                  <FieldTextArea 
+                    id="content"
+                    name="content"
+                    {...register}
+                  />
+                </FieldContainer>
+                <FormButtonContainer>
+                  <PrimaryButton type="submit">
+                    Submit Your Answer
+                  </PrimaryButton>
+                </FormButtonContainer>
+              </Fieldset>
+            </form>
           </React.Fragment>
         )}
       </div>
