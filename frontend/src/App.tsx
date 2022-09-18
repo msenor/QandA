@@ -25,6 +25,7 @@ function App() {
         <Routes>
           <Route path="" element={<HomePage />} />
           <Route path="search" element={<SearchPage />} />
+          {/** I set up ask for lazy loading for learning purposes */}
           <Route
             path="ask"
             element={
