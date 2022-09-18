@@ -21,6 +21,13 @@ export interface PostQuestionData {
   created: Date;
 }
 
+export interface PostAnswerData {
+  questionId: number;
+  content: string;
+  userName: string;
+  created: Date;
+}
+
 const questions: QuestionData[] = [
   {
     questionId: 1,
@@ -82,7 +89,7 @@ export const searchQuestions = async (
 
 export const postQuestion = async (
   question: PostQuestionData
-  ): Promise<QuestionData | undefined> => {
+): Promise<QuestionData | undefined> => {
   await wait(500);
   const questionId = Math.max(...questions.map((q) => q.questionId)) + 1;
   const newQuestion: QuestionData = {
@@ -93,6 +100,19 @@ export const postQuestion = async (
   questions.push(newQuestion);
   return newQuestion;
 };
+
+export const postAnswer = async (
+  answer: PostAnswerData
+): Promise<AnswerData | undefined> => {
+  await wait(500);
+  const question = questions.filter((q) => q.questionId === answer.questionId)[0];
+  const answerInQuestion: AnswerData = {
+    answerId: 99,
+    ...answer
+  };
+  question.answers.push(answerInQuestion);
+  return answerInQuestion;
+}
 
 const wait = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
