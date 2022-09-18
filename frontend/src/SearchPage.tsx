@@ -8,8 +8,8 @@ import { searchQuestions, QuestionData } from './QuestionsData';
 
 export const SearchPage = () => {
   const [searchParams] = useSearchParams();
-  const [questions, setQuestions] = React.useState<QuestionData[]>([]);
   const search = searchParams.get('criteria') || "";
+  const [questions, setQuestions] = React.useState<QuestionData[]>([]);
   React.useEffect(() => {
     const doSearch = async (criteria: string) => {
       const foundResults = await searchQuestions(criteria);
