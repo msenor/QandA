@@ -13,5 +13,11 @@
   <ItemGroup>
     <None Remove="Dapper" />
     <None Remove="Microsoft.Data.SqlClient" />
+    <None Remove="Data\" />
+    <None Remove="Data\Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Data\Models\" />
   </ItemGroup>
 </Project>
