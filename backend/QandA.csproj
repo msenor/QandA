@@ -17,9 +17,17 @@
     <None Remove="Data\" />
     <None Remove="Data\Models\" />
     <None Remove="dbup" />
+    <None Remove="SQLScripts\" />
+    <None Remove="SQLScripts\01-Tables.sql" />
+    <None Remove="SQLScripts\02-Sprocs.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Data\Models\" />
+    <Folder Include="SQLScripts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SQLScripts\01-Tables.sql" />
+    <EmbeddedResource Include="SQLScripts\02-Sprocs.sql" />
   </ItemGroup>
 </Project>
