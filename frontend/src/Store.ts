@@ -1,3 +1,4 @@
+import { Store, createStore, combineReducers } from 'redux';
 import { QuestionData } from './QuestionsData';
 
 interface QuestionsState {
@@ -75,7 +76,7 @@ const questionsReducer = (
       return {
         ...state,
         loading: true
-      };
+      }
     }
 
     case GOTUNANSWEREDQUESTIONS: {
@@ -87,19 +88,35 @@ const questionsReducer = (
     }
 
     case GETTINGQUESTION: {
-
+      return {
+        ...state,
+        viewing: null,
+        loading: true
+      }
     }
 
     case GOTQUESTION: {
-
+      return {
+        ...state,
+        viewing: action.question,
+        loading: false
+      }
     }
 
     case SEARCHINGQUESTIONS: {
-
+      return {
+        ...state,
+        searched: [],
+        loading: true
+      }
     }
 
     case SEARCHEDQUESTIONS: {
-
+      return {
+        ...state,
+        searched: action.questions,
+        loading: false
+      }
     }
   }
   return state;
