@@ -8,6 +8,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
+    <PackageReference Include="dbup" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,6 +16,7 @@
     <None Remove="Microsoft.Data.SqlClient" />
     <None Remove="Data\" />
     <None Remove="Data\Models\" />
+    <None Remove="dbup" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
