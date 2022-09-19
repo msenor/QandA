@@ -17,3 +17,90 @@ const initialQuestionState: QuestionsState = {
   viewing: null,
   searched: []
 }
+
+//
+// ACTIONS
+//
+export const GETTINGUNANSWEREDQUESTIONS = 'GettingUnansweredQuestions';
+export const gettingUnansweredQuestionsAction = () => ({
+  type: GETTINGUNANSWEREDQUESTIONS
+} as const);
+
+export const GOTUNANSWEREDQUESTIONS = 'GotUnansweredQuestions';
+export const gotUnansweredQuestionsAction = (questions: QuestionData[]) => ({
+  type: GOTUNANSWEREDQUESTIONS,
+  questions: questions
+} as const);
+
+export const GETTINGQUESTION = 'GettingQuestion';
+export const gettingQuestionAction = () => ({
+  type: GETTINGQUESTION
+} as const);
+
+export const GOTQUESTION = 'GotQuestion';
+export const gotQuestionAction = (question: QuestionData | null) => ({
+  type: GOTQUESTION,
+  question: question
+} as const);
+
+export const SEARCHINGQUESTIONS = 'SearchingQuestions';
+export const searchingQuestionsAction = () => ({
+  type: SEARCHINGQUESTIONS
+} as const);
+
+export const SEARCHEDQUESTIONS = 'SearchedQuestions';
+export const searchedQuestionsAction = (questions: QuestionData[]) => ({
+  type: SEARCHEDQUESTIONS,
+  questions
+} as const);
+
+type QuestionsActions = 
+  | ReturnType<typeof gettingUnansweredQuestionsAction>
+  | ReturnType<typeof gotUnansweredQuestionsAction>
+  | ReturnType<typeof gettingQuestionAction>
+  | ReturnType<typeof gotQuestionAction>
+  | ReturnType<typeof searchingQuestionsAction>
+  | ReturnType<typeof searchedQuestionsAction>;
+
+//
+// REDUCERS
+//
+
+const questionsReducer = (
+  state = initialQuestionState,
+  action: QuestionsActions
+) => {
+  switch (action.type) {
+    case GETTINGUNANSWEREDQUESTIONS: {
+      return {
+        ...state,
+        loading: true
+      };
+    }
+
+    case GOTUNANSWEREDQUESTIONS: {
+      return {
+        ...state,
+        unanswered: action.questions,
+        loading: false
+      }
+    }
+
+    case GETTINGQUESTION: {
+
+    }
+
+    case GOTQUESTION: {
+
+    }
+
+    case SEARCHINGQUESTIONS: {
+
+    }
+
+    case SEARCHEDQUESTIONS: {
+
+    }
+  }
+  return state;
+};
