@@ -8,6 +8,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
+    <PackageReference Include="dbup" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,9 +16,18 @@
     <None Remove="Microsoft.Data.SqlClient" />
     <None Remove="Data\" />
     <None Remove="Data\Models\" />
+    <None Remove="dbup" />
+    <None Remove="SQLScripts\" />
+    <None Remove="SQLScripts\01-Tables.sql" />
+    <None Remove="SQLScripts\02-Sprocs.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Data\Models\" />
+    <Folder Include="SQLScripts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SQLScripts\01-Tables.sql" />
+    <EmbeddedResource Include="SQLScripts\02-Sprocs.sql" />
   </ItemGroup>
 </Project>
