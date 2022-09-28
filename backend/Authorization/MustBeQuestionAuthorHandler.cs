@@ -32,7 +32,7 @@ namespace QandA.Authorization
             int questionIdAsInt = Convert.ToInt32(questionId);
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var question = _dataRepository.GetQuestion(questionIdAsInt);
+            var question = await _dataRepository.GetQuestion(questionIdAsInt);
 
             //if the question can't be found go to the next piece of middleware
             if (question == null)
