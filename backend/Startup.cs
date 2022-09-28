@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 using DbUp;
 using QandA.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using QandA.Authorization;
 
 namespace QandA
 {
@@ -50,6 +53,7 @@ namespace QandA
             services.AddMemoryCache();
             services.AddSingleton<IQuestionCache, QuestionCache>();
 
+            //Services for authorization
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,6 +63,12 @@ namespace QandA
                 options.Authority = Configuration["Auth0:Authority"];
                 options.Audience = Configuration["Auth0:Audience"];
             });
+            services.AddHttpClient();
+            services.AddAuthorization(options =>
+                options.AddPolicy("MustBeQuestionAuthor", policy =>
+                    policy.Requirements.Add(new MustBeQuestionAuthorRequirement())));
+            services.AddScoped<IAuthorizationHandler, MustBeQuestionAuthorHandler>();
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
