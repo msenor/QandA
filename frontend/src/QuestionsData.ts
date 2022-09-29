@@ -1,3 +1,5 @@
+import { http } from './http';
+
 export interface QuestionData {
   questionId: number;
   title: string;
@@ -77,13 +79,14 @@ const questions: QuestionData[] = [
 ];
 
 export const getUnansweredQuestions = async (): Promise<QuestionData[]> => {
-  let unansweredQuestions: QuestionData[] = [];
-  const response = await fetch('https://localhost:5001/api/questions/unanswered');
-  unansweredQuestions = await response.json();
-  return unansweredQuestions.map((question) => ({
-    ...question,
-    created: new Date(question.created)
-  }));
+  const result = await http<QuestionDataFromServer[]>({
+    path: '/questions/unanswered'
+  });
+  if (result.ok && result.body) {
+    return result.body.map(mapQuestionFromServer);
+  } else {
+    return [];
+  }
 };
 
 const wait = async (ms: number): Promise<void> => {
@@ -93,20 +96,27 @@ const wait = async (ms: number): Promise<void> => {
 export const getQuestion = async (
   questionId: number,
 ): Promise<QuestionData | null> => {
-  await wait(500);
-  const results = questions.filter((q) => q.questionId === questionId);
-  return results.length === 0 ? null : results[0];
+  const result = await http<QuestionDataFromServer>({
+    path: `/questions/${questionId}`
+  });
+  if (result.ok && result.body) {
+    return mapQuestionFromServer(result.body);
+  } else {
+    return null;
+  }
 };
 
 export const searchQuestions = async (
   criteria: string,
 ): Promise<QuestionData[]> => {
-  await wait(500);
-  return questions.filter(
-    (q) =>
-      q.title.toLowerCase().indexOf(criteria.toLowerCase()) >= 0 ||
-      q.content.toLowerCase().indexOf(criteria.toLowerCase()) >= 0,
-  );
+  const result = await http<QuestionDataFromServer[]>({
+    path: `/questions?search=${criteria}`
+  });
+  if (result.ok && result.body) {
+    return result.body.map(mapQuestionFromServer);
+  } else {
+    return [];
+  }
 };
 
 export interface PostQuestionData {
