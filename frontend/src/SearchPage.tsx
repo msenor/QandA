@@ -2,30 +2,25 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Page } from './Page';
+
 import { useSearchParams } from 'react-router-dom';
 import { QuestionList } from './QuestionList';
-import { searchQuestions } from './QuestionsData';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  AppState,
-  searchingQuestionsAction,
-  searchedQuestionsAction
-} from './Store';
+import { searchQuestions, QuestionData } from './QuestionsData';
 
 export const SearchPage = () => {
-  const dispatch = useDispatch();
-  const questions = useSelector((state: AppState) => state.questions.searched);
   const [searchParams] = useSearchParams();
-  const search = searchParams.get('criteria') || "";
+  const [questions, setQuestions] = React.useState<QuestionData[]>([]);
+
+  const search = searchParams.get('criteria') || '';
+
   React.useEffect(() => {
     const doSearch = async (criteria: string) => {
-      dispatch(searchingQuestionsAction());
       const foundResults = await searchQuestions(criteria);
-      dispatch(searchedQuestionsAction(foundResults))
-    }
+      setQuestions(foundResults);
+    };
     doSearch(search);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search])
+  }, [search]);
+
   return (
     <Page title="Search Results">
       {search && (
@@ -42,4 +37,4 @@ export const SearchPage = () => {
       <QuestionList data={questions} />
     </Page>
   );
-}
+};

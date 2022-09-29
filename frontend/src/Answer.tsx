@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
+
 import { AnswerData } from './QuestionsData';
 import { gray3 } from './Styles';
 
@@ -29,7 +30,7 @@ export const Answer = ({ data }: Props) => (
         color: ${gray3};
       `}
     >
-      {`Answered by ${data.userName} on 
+      {`Answered by ${data.userName} on
       ${data.created.toLocaleDateString()} 
       ${data.created.toLocaleTimeString()}`}
     </div>

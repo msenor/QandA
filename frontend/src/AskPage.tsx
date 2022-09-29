@@ -6,10 +6,10 @@ import {
   FieldLabel,
   FieldInput,
   FieldTextArea,
-  FieldError,
   FormButtonContainer,
   PrimaryButton,
-  SubmissionSuccess
+  FieldError,
+  SubmissionSuccess,
 } from './Styles';
 import { useForm } from 'react-hook-form';
 import { postQuestion } from './QuestionsData';
@@ -20,13 +20,12 @@ type FormData = {
 };
 
 export const AskPage = () => {
-  const [successfullySubmitted, setSuccessfullySubmitted] = React.useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting } 
-  } = useForm<FormData>({
-    mode: 'onBlur'
+  const [successfullySubmitted, setSuccessfullySubmitted] = React.useState(
+    false,
+  );
+
+  const { register, errors, handleSubmit, formState } = useForm<FormData>({
+    mode: 'onBlur',
   });
 
   const submitForm = async (data: FormData) => {
@@ -34,68 +33,54 @@ export const AskPage = () => {
       title: data.title,
       content: data.content,
       userName: 'Fred',
-      created: new Date()
+      created: new Date(),
     });
     setSuccessfullySubmitted(result ? true : false);
   };
 
   return (
-    <Page title='Ask a question'>
+    <Page title="Ask a question">
       <form onSubmit={handleSubmit(submitForm)}>
-        <Fieldset
-          disabled={
-            isSubmitting || successfullySubmitted
-          }
-        >
+        <Fieldset disabled={formState.isSubmitting || successfullySubmitted}>
           <FieldContainer>
-            <FieldLabel htmlFor='title'>
-              Title
-            </FieldLabel>
+            <FieldLabel htmlFor="title">Title</FieldLabel>
             <FieldInput
-              id='title'
-              type='text'
-              {...register('title', {
+              id="title"
+              name="title"
+              type="text"
+              ref={register({
                 required: true,
-                minLength: 5
+                minLength: 10,
               })}
             />
             {errors.title && errors.title.type === 'required' && (
-              <FieldError>
-                You must enter the question title
-              </FieldError>
+              <FieldError>Your must enter the question title</FieldError>
             )}
             {errors.title && errors.title.type === 'minLength' && (
-              <FieldError>
-                The title must be at least 5 characters
-              </FieldError>
+              <FieldError>The title must be at least 10 characters</FieldError>
             )}
           </FieldContainer>
           <FieldContainer>
-            <FieldLabel htmlFor='content'>
-              Content
-            </FieldLabel>
+            <FieldLabel htmlFor="content">Content</FieldLabel>
             <FieldTextArea
-              id='content'
-              {...register('content', {
+              id="content"
+              name="content"
+              ref={register({
                 required: true,
-                minLength: 10
+                minLength: 50,
               })}
             />
             {errors.content && errors.content.type === 'required' && (
-              <FieldError>
-                You must enter the question content
-              </FieldError>
+              <FieldError>Your must enter the question content</FieldError>
             )}
             {errors.content && errors.content.type === 'minLength' && (
               <FieldError>
-                The content must be at least 10 characters
+                The content must be at least 50 characters
               </FieldError>
             )}
           </FieldContainer>
           <FormButtonContainer>
-            <PrimaryButton type='submit'>
-              Submit Your Question
-            </PrimaryButton>
+            <PrimaryButton type="submit">Submit Your Question</PrimaryButton>
           </FormButtonContainer>
           {successfullySubmitted && (
             <SubmissionSuccess>
@@ -105,7 +90,7 @@ export const AskPage = () => {
         </Fieldset>
       </form>
     </Page>
-  )
-}
+  );
+};
 
 export default AskPage;

@@ -7,6 +7,20 @@ export interface QuestionData {
   answers: AnswerData[];
 }
 
+export interface QuestionDataFromServer {
+  questionId: number;
+  title: string;
+  content: string;
+  userName: string;
+  created: string;
+  answers: Array<{
+    answerId: number;
+    content: string;
+    userName: string;
+    created: string;
+  }>;
+}
+
 export interface AnswerData {
   answerId: number;
   content: string;
@@ -14,27 +28,25 @@ export interface AnswerData {
   created: Date;
 }
 
-export interface PostQuestionData {
-  title: string;
-  content: string;
-  userName: string;
-  created: Date;
-}
-
-export interface PostAnswerData {
-  questionId: number;
-  content: string;
-  userName: string;
-  created: Date;
-}
+export const mapQuestionFromServer = (
+  question: QuestionDataFromServer,
+): QuestionData => ({
+  ...question,
+  created: new Date(question.created),
+  answers: question.answers
+    ? question.answers.map((answer) => ({
+        ...answer,
+        created: new Date(answer.created),
+      }))
+    : [],
+});
 
 const questions: QuestionData[] = [
   {
     questionId: 1,
     title: 'Why should I learn TypeScript?',
     content:
-      'TypeScript seems to be getting popular so I wondered whether it is ' +
-      'worth my time learning it? What benefits does it give over JavaScript?',
+      'TypeScript seems to be getting popular so I wondered whether it is worth my time learning it? What benefits does it give over JavaScript?',
     userName: 'Bob',
     created: new Date(),
     answers: [
@@ -47,7 +59,7 @@ const questions: QuestionData[] = [
       {
         answerId: 2,
         content:
-          'So, that you can use the JavaSript features of tomorrow, today',
+          'So, that you can use the JavaScript features of tomorrow, today',
         userName: 'Fred',
         created: new Date(),
       },
@@ -69,6 +81,10 @@ export const getUnansweredQuestions = async (): Promise<QuestionData[]> => {
   return questions.filter((q) => q.answers.length === 0);
 };
 
+const wait = async (ms: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
 export const getQuestion = async (
   questionId: number,
 ): Promise<QuestionData | null> => {
@@ -78,42 +94,55 @@ export const getQuestion = async (
 };
 
 export const searchQuestions = async (
-  criteria: string
-  ): Promise<QuestionData[]> => {
+  criteria: string,
+): Promise<QuestionData[]> => {
   await wait(500);
-  return questions.filter((q) =>
-    q.title.toLowerCase().indexOf(criteria.toLowerCase()) >= 0 ||
-    q.content.toLowerCase().indexOf(criteria.toLowerCase()) >= 0
+  return questions.filter(
+    (q) =>
+      q.title.toLowerCase().indexOf(criteria.toLowerCase()) >= 0 ||
+      q.content.toLowerCase().indexOf(criteria.toLowerCase()) >= 0,
   );
 };
 
+export interface PostQuestionData {
+  title: string;
+  content: string;
+  userName: string;
+  created: Date;
+}
+
 export const postQuestion = async (
-  question: PostQuestionData
+  question: PostQuestionData,
 ): Promise<QuestionData | undefined> => {
   await wait(500);
   const questionId = Math.max(...questions.map((q) => q.questionId)) + 1;
   const newQuestion: QuestionData = {
     ...question,
     questionId,
-    answers: []
-  }
+    answers: [],
+  };
   questions.push(newQuestion);
   return newQuestion;
 };
 
+export interface PostAnswerData {
+  questionId: number;
+  content: string;
+  userName: string;
+  created: Date;
+}
+
 export const postAnswer = async (
-  answer: PostAnswerData
+  answer: PostAnswerData,
 ): Promise<AnswerData | undefined> => {
   await wait(500);
-  const question = questions.filter((q) => q.questionId === answer.questionId)[0];
+  const question = questions.filter(
+    (q) => q.questionId === answer.questionId,
+  )[0];
   const answerInQuestion: AnswerData = {
     answerId: 99,
-    ...answer
+    ...answer,
   };
   question.answers.push(answerInQuestion);
   return answerInQuestion;
-}
-
-const wait = (ms: number): Promise<void> => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 };
