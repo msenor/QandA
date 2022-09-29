@@ -44,7 +44,7 @@ export const QuestionPage = () => {
     }
   }, [questionId]);
 
-  const { register, errors, handleSubmit, formState } = useForm<FormData>({
+  const { register, handleSubmit, formState: {errors, isSubmitting } } = useForm<FormData>({
     mode: 'onBlur',
   });
 
@@ -107,16 +107,15 @@ export const QuestionPage = () => {
               `}
             >
               <Fieldset
-                disabled={formState.isSubmitting || successfullySubmitted}
+                disabled={isSubmitting || successfullySubmitted}
               >
                 <FieldContainer>
                   <FieldLabel htmlFor="content">Your Answer</FieldLabel>
-                  <FieldTextArea
-                    id="content"
-                    name="content"
-                    ref={register({
+                  <FieldTextArea 
+                    id='content'
+                    {...register('content', {
                       required: true,
-                      minLength: 50,
+                      minLength: 10
                     })}
                   />
                   {errors.content && errors.content.type === 'required' && (
